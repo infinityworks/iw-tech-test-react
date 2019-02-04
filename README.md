@@ -2,6 +2,8 @@
 
 This is the Infinity Works React Tech Test.
 
+![Preview of Frontend](preview.png)
+
 ## Requirements
 - NPM
 - Access to the Internet
