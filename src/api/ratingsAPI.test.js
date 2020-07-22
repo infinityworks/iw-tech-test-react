@@ -17,6 +17,6 @@ describe('Ratings API', () => {
         // Then
         expect(actual).toEqual(expected);
         expect(fetch.mock.calls.length).toEqual(1);
-        expect(fetch.mock.calls[0][0]).toEqual(`http://api.ratings.food.gov.uk/Establishments?&pageNumber=${pageNum}&pageSize=10`)
+        expect(fetch.mock.calls[0][0]).toEqual(`http://api.ratings.food.gov.uk/Establishments/basic/${pageNum}/10`)
     })
 });
