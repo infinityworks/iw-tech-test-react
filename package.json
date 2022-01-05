@@ -6,11 +6,11 @@
     "prop-types": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "^4.0.3"
+    "react-scripts": "^5.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\""
   },
@@ -29,6 +29,9 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "jest-fetch-mock": "^3.0.3"
+  },
+  "jest": {
+    "resetMocks": false
   },
   "lint-staged": {
     "./src/**/*.{ts,tsx,json}": [
