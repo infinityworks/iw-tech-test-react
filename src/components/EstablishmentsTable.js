@@ -1,6 +1,8 @@
 import React from "react";
-import { EstablishmentsTableRow } from "./EstablishmentsTableRow";
 import PropTypes from "prop-types";
+
+import getEstablishmentRatings from "../api/ratingsAPI";
+import { EstablishmentsTableRow } from "./EstablishmentsTableRow";
 
 const headerStyle = {
   paddingBottom: "10px",
@@ -8,7 +10,11 @@ const headerStyle = {
   fontSize: "20px",
 };
 
-export const EstablishmentsTable = ({ establishments }) => {
+export const EstablishmentsTable = ({ pageNumber }) => {
+  const { establishments, isError } =
+    getEstablishmentRatings(pageNumber);
+
+  if (isError) return <div>Error: {isError}</div>;
   return (
     <table>
       <tbody>
@@ -16,7 +22,7 @@ export const EstablishmentsTable = ({ establishments }) => {
           <th style={headerStyle}>Business Name</th>
           <th style={headerStyle}>Rating Value</th>
         </tr>
-        {establishments.map((establishment, index) => (
+        {establishments && establishments?.map((establishment, index) => (
           <EstablishmentsTableRow key={index} establishment={establishment} />
         ))}
       </tbody>
@@ -25,5 +31,5 @@ export const EstablishmentsTable = ({ establishments }) => {
 };
 
 EstablishmentsTable.propTypes = {
-  establishments: PropTypes.array,
+  pageNumber: PropTypes.number,
 };

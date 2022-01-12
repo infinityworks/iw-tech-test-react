@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { EstablishmentsTable } from "./EstablishmentsTable";
 import { EstablishmentsTableNavigation } from "./EstablishmentsTableNavigation";
-import { getEstablishmentRatings } from "../api/ratingsAPI";
 
 const tableStyle = {
   background: "rgba(51, 51, 51, 0.9)",
@@ -12,61 +11,27 @@ const tableStyle = {
 };
 
 export const PaginatedEstablishmentsTable = () => {
-  const [error, setError] = useState(null);
-  const [establishments, setEstablishments] = useState([]);
-  const [pageNum, setPageNum] = useState(1);
-  // eslint-disable-next-line no-unused-vars
-  const [pageCount, setPageCount] = useState(100);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageCount = 100;
 
-  useEffect(() => {
-    getEstablishmentRatings(pageNum).then(
-      (result) => {
-        setEstablishments(result.establishments);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
-  }, []);
-
-  async function handlePreviousPage() {
-    pageNum > 1 && setPageNum(pageNum - 1);
-    getEstablishmentRatings(pageNum).then(
-      (result) => {
-        setEstablishments(result.establishments);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
+  function handlePreviousPage() {
+    pageNumber > 1 && setPageNumber(pageNumber - 1);
   }
 
-  async function handleNextPage() {
-    pageNum < pageCount && setPageNum(pageNum + 1);
-    getEstablishmentRatings(pageNum).then(
-      (result) => {
-        setEstablishments(result.establishments);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
+  function handleNextPage() {
+    pageNumber < pageCount && setPageNumber(pageNumber + 1);
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  } else {
-    return (
-      <div style={tableStyle}>
-        <h2>Food Hygiene Ratings</h2>
-        <EstablishmentsTable establishments={establishments} />
-        <EstablishmentsTableNavigation
-          pageNum={pageNum}
-          pageCount={pageCount}
-          onPreviousPage={handlePreviousPage}
-          onNextPage={handleNextPage}
-        />
-      </div>
-    );
-  }
+  return (
+    <div style={tableStyle}>
+      <h2>Food Hygiene Ratings</h2>
+      <EstablishmentsTable pageNumber={pageNumber} />
+      <EstablishmentsTableNavigation
+        pageNumber={pageNumber}
+        pageCount={pageCount}
+        onPreviousPage={handlePreviousPage}
+        onNextPage={handleNextPage}
+      />
+    </div>
+  );
 };

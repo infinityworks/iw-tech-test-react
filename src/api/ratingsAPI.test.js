@@ -1,24 +1,32 @@
-import { getEstablishmentRatings } from "./ratingsAPI";
+import "@testing-library/jest-dom/extend-expect";
+import useSWR from 'swr';
 
+import getEstablishmentRatings from '../api/ratingsAPI';
+
+const fetcher = (...args) =>
+  fetch(...args, { headers: { "x-api-version": "2" } }).then((res) =>
+    res.json()
+  );
+
+jest.mock('swr', () => jest.fn(() => ({ data: null, error: null })));
 describe("Ratings API", () => {
-  beforeEach(() => {
-    fetch.resetMocks();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it("call the ratings api with the provided page number and returns the data", async () => {
-    // Given
-    let pageNum = 1;
-    let expected = { test: "test" };
-    fetch.mockResponseOnce(JSON.stringify(expected));
+    const data = { data: { establishments: [] } };
+    const error = null
+    useSWR.mockImplementation(() => ({ data, error }));
 
-    // When
-    let actual = await getEstablishmentRatings(pageNum);
+    let pageNumber = 1;
 
-    // Then
-    expect(actual).toEqual(expected);
-    expect(fetch.mock.calls.length).toEqual(1);
-    expect(fetch.mock.calls[0][0]).toEqual(
-      `http://api.ratings.food.gov.uk/Establishments/basic/${pageNum}/10`
-    );
+    getEstablishmentRatings(pageNumber);
+
+
+    const url = `https://api.ratings.food.gov.uk/Establishments/basic/${pageNumber}/10`;
+    expect(useSWR).toHaveBeenCalledWith(
+      expect.objectContaining({ url, fetcher }),
+    )
   });
 });
