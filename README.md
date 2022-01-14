@@ -6,7 +6,7 @@ This is the Infinity Works React Tech Test.
 
 ## Requirements
 
-- NPM
+- NPM [(more info)](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - Access to the Internet
 - Suitable development environment
 

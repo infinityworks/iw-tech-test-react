@@ -1,6 +1,9 @@
 import React from "react";
-import { EstablishmentsTableRow } from "./EstablishmentsTableRow";
 import PropTypes from "prop-types";
+import useSWR from "swr";
+
+import { EstablishmentsTableRow } from "./EstablishmentsTableRow";
+import { fetcher } from "../utils";
 
 const headerStyle = {
   paddingBottom: "10px",
@@ -8,7 +11,12 @@ const headerStyle = {
   fontSize: "20px",
 };
 
-export const EstablishmentsTable = ({ establishments }) => {
+export const EstablishmentsTable = ({ pageNumber }) => {
+  const url = `https://api.ratings.food.gov.uk/Establishments/basic/${pageNumber}/10`;
+  const { data, error } = useSWR(url, fetcher);
+  const { establishments } = data || {};
+
+  if (error) return <div>Error: {error}</div>;
   return (
     <table>
       <tbody>
@@ -16,7 +24,7 @@ export const EstablishmentsTable = ({ establishments }) => {
           <th style={headerStyle}>Business Name</th>
           <th style={headerStyle}>Rating Value</th>
         </tr>
-        {establishments.map((establishment, index) => (
+        {establishments?.map((establishment, index) => (
           <EstablishmentsTableRow key={index} establishment={establishment} />
         ))}
       </tbody>
@@ -25,5 +33,5 @@ export const EstablishmentsTable = ({ establishments }) => {
 };
 
 EstablishmentsTable.propTypes = {
-  establishments: PropTypes.array,
+  pageNumber: PropTypes.number,
 };
