@@ -19,11 +19,13 @@ export const EstablishmentsTable = ({ pageNumber }) => {
   if (error) return <div>Error: {error}</div>;
   return (
     <table>
-      <tbody>
+      <thead>
         <tr>
           <th style={headerStyle}>Business Name</th>
           <th style={headerStyle}>Rating Value</th>
         </tr>
+      </thead>
+      <tbody>
         {establishments?.map((establishment, index) => (
           <EstablishmentsTableRow key={index} establishment={establishment} />
         ))}
