@@ -1,9 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
-import useSWR from "swr";
 
 import { EstablishmentsTableRow } from "./EstablishmentsTableRow";
-import { fetcher } from "../utils";
 
 const headerStyle = {
   paddingBottom: "10px",
@@ -12,8 +10,16 @@ const headerStyle = {
 };
 
 export const EstablishmentsTable = ({ pageNumber }) => {
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
+
   const url = `https://api.ratings.food.gov.uk/Establishments/basic/${pageNumber}/10`;
-  const { data, error } = useSWR(url, fetcher);
+  
+  fetch(url, { headers: { "x-api-version": "2" } })
+    .then(res => res.json())
+    .then(json => setData(json))
+    .catch(err => setError(err))
+  
   const { establishments } = data || {};
 
   if (error) return <div>Error: {error}</div>;
